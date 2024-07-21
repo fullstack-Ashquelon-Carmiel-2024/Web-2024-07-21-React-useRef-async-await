@@ -1,0 +1,8 @@
+https://randomuser.me/
+https://dummyjson.com/docs/todos
+https://dog.ceo/api/breeds/image/random
+https://www.boredapi.com/api/activity 
+https://api.genderize.io/?name=Moshe 
+https://en.wikipedia.org/w/api.php?action=parse&page=Pet_door&format=json
+https://jsonplaceholder.typicode.com/users/1
+https://rapidapi.com (needs account)
