@@ -12,19 +12,43 @@ export default function AddUser({children, add}) {
   const handleChange = e => setFormData({...formData,
                                    [e.target.name]: e.target.value});
 
+  /* MISSION 02: 
+  1. create ref variable for the element 
+
+  <div className="opacity-0 text-danger" >
+      The Email or the Nick already exists!
+  </div>
+
+  2. If add(formData) returns false,
+
+  replace class 'opacity-0' by 'opacity-100'
+
+  3. Optionally: you could change the text too
+
+  4. When add(formData) returns true,
+
+  replace class 'opacity-100' by 'opacity-0'
+  */
+
   function onSubmit(e) {
 
     e.preventDefault();
 
-    /* if (e.target.checkValidity()) { */
+    // event = "submit", so the target is <form>
+    // class "was-validated" enable showing the error fields
+    e.target.classList.add('was-validated');
+
+    if (e.target.checkValidity()) {
 
       add(formData);
       setFormData({fullName:'',email:'',
                     nick:'',phone:'',
                     gender:'',role:''});
-      navigate('/');
+      navigate('/users');
 
-    /* } */
+      e.target.classList.remove('was-validated');
+
+    }
 
   }
 
@@ -38,11 +62,11 @@ export default function AddUser({children, add}) {
           {/* noValidate - removes original HTML validation, 
               pay attention that here in React it is written noValidate
               and not novalidate as in plain HTML */}
-          <form className="fs-3" onSubmit={onSubmit} /* noValidate */  >
+          <form className="fs-3" onSubmit={onSubmit} noValidate  >
           
             <div className="form-group row">
                 <div className="opacity-0 text-danger" >
-                    The Name or the Nick already exists!
+                    The Email or the Nick already exists!
                 </div>
             </div>
             <div className="form-group row mb-2">

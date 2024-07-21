@@ -56,14 +56,11 @@ function App() {
     console.log(`users after setUsers()\n`,users);
     localStorage.setItem('bulls-and-cows-players',JSON.stringify(newUsers));
 
-  }
+    /* MISSION 01: add check for the existing email or nick.
+       -- If exists, don't do nothing, return false 
+       -- If not, add the user, return true */
 
-  // MISSION:
-  // 1. contexts: Create in contexts dir UserContext
-  // 2. App:Bring it here and create UserContext.Provider
-  // 3. App: Add removeUser to the "value" of the Provider
-  // 4. UserCard: Get it in UserCard
-  // 5. UserCard: Use it onClick on the "delete" button
+  }
 
   console.log(`users before return()\n`,users)
   return (
