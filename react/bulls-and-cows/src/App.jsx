@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { Routes, Route } from 'react-router-dom';
 
+import AdminRoute from './routes/AdminRoute';
+
 import AddUser from './components/addUser/AddUser';
 import BullsAndCows from './games/bulls-and-cows/BullsAndCows';
 import Header from './components/header/Header';
@@ -77,16 +79,38 @@ function App() {
 
           <Route path="/login" element={<Login users={users} setCurrUser={setCurrUser} /> } />
 
-          <Route path="/user-list" element={<UserList users={users}>
-                                    <Header title='User List' /> 
-                                  </UserList>} />
-        {/* MISSION: add Route with the link /add-user for AddUser page: */}
+          {/* USERS-USERS-USERS-USER-USERS */}
 
-          <Route path="/add-user" element={<AddUser add={addUser}>
-                                            <Header title='Add User' /> 
-                                          </AddUser>} />
-                                          
-          <Route path="/bulls-and-cows" element={<BullsAndCows />} />
+          <Route path="/users">
+
+            <Route element={<AdminRoute role={currUser.role} />} >
+
+              <Route index element={<UserList users={users}>
+                                        <Header title='User List' /> 
+                                      </UserList>} />
+            
+
+              <Route path="add" element={<AddUser add={addUser}>
+                                              <Header title='Add User' /> 
+                                            </AddUser>} />
+            </Route>
+
+            {/* <Route path=":id" element={<UserDetails add={addUser} />} /> */}
+
+          </Route>
+
+          {/* GAMES-GAMES-GAMES-GAME-GAMES */}
+
+          <Route path="/games">
+                {/* <Route index element={<GameGallery />} /> */}{/* /games */}
+                <Route path="bulls-and-cows" element={<BullsAndCows />} />
+                {/* <Route path="fox-and-hounds" element={<FoxAndHounds />} /> */}
+                
+                <Route path="results" >
+                    {/* <Route index element={<GameTournamentResults />} /> */}{/* /games/results */}
+                    {/* <Route path="edit" element={<EditGameResults />} /> */}{/* /games/results/edit */}
+                </Route>
+          </Route>                                
           
           <Route path="/use-effect" element={<UseEffect />} />
 

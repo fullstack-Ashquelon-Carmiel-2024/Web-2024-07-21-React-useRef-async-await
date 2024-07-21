@@ -2,7 +2,7 @@ import './Navbar.scss';
 import logo from '../../assets/logo/logo-bull01.svg';
 import justUser from '../../assets/images/user02.png';
 import { Link } from 'react-router-dom';
-import { useContext, useState } from 'react';
+import { useContext, useState, useRef, useEffect } from 'react';
 import { logout } from '../../services/auth';
 import UserContext from '../../contexts/userContext';
 
@@ -14,6 +14,56 @@ export default function Navbar({setCurrUser}) {
   const [ dropdowns, setDropdowns ] = useState({admin:false,
                                                 games:false,
                                               profile:false});
+// There are 2 uses for useRef:
+//   -- To keep some value through re-renders
+//   -- To point to HTML element
+// Ref does not cause re-render and keeps it's value through re-renders.
+// When we get it's value we should apply to it's property "current".
+  const adminMenuRef = useRef(null);
+  const adminToggleRef = useRef(null);
+  const gamesMenuRef = useRef(null);
+  const gamesToggleRef = useRef(null);
+  const profileMenuRef = useRef(null);
+  const profileToggleRef = useRef(null);
+  
+  const checkClickAr = [ adminMenuRef, gamesMenuRef, profileMenuRef, adminToggleRef, gamesToggleRef, profileToggleRef];
+
+  // const a = useRef(1);
+  // If there is a button that adds 1 to a, so a will become 2, but it will not cause re-render.
+  // But when re-render will happen, a will keep it's last value (2).
+  // console.log(a.current);
+
+ useEffect(() => {
+
+  function closeMenu(e) {
+
+    const elementsAr = e.composedPath();
+    console.log(`elementsAr: \n`, elementsAr);
+
+    // If everybody (each menu and it's button ) not included in the list
+    // of the elements that were around the "click" - we close the menus.
+
+    let result = checkClickAr.every(ref => !elementsAr.includes(ref.current));
+
+    if (result) {
+
+      setDropdowns(Object.keys(dropdowns).reduce((acc,drop) => { 
+        return {...acc, [drop]: false}
+      },{}))
+
+    }
+
+  }
+
+  document.body.addEventListener('click',closeMenu);
+
+  return (() => {
+
+    document.body.removeEventListener('click',closeMenu); // Will be removed when the Navbar will UNMOUNT
+
+  })
+
+ },[])
 
   const clickDropdown = (dName) => {
     if (!dropdowns[dName]) { // if it will be open, we should close the others
@@ -47,11 +97,12 @@ export default function Navbar({setCurrUser}) {
               <li className="nav-item">
             <Link to="#" className={`nav-link dropdown-toggle ${dropdowns.admin && 'show'}`} 
                 id="navbarDropdown" role="button" data-bs-toggle="dropdown" 
-                aria-expanded={dropdowns.admin} onClick={()=>clickDropdown('admin')} >
+                aria-expanded={dropdowns.admin} onClick={()=>clickDropdown('admin')}
+                ref={adminToggleRef} >
                   Admin
             </Link>
             <ul className={`dropdown-menu ${dropdowns.admin && 'show'}`} 
-                  aria-labelledby="navbarDropdown" >
+                  aria-labelledby="navbarDropdown" ref={adminMenuRef} >
             <li><Link to="/users" className="dropdown-item">All the Users</Link></li>
             <li><Link to="/users/add" className="dropdown-item">Add User</Link></li>
             <li><hr className="dropdown-divider" /></li>
@@ -69,11 +120,12 @@ export default function Navbar({setCurrUser}) {
           <li className="nav-item">
             <Link to="#" className={`nav-link dropdown-toggle ${dropdowns.games && 'show'}`} 
                 id="navbarDropdown" role="button" data-bs-toggle="dropdown" 
-                aria-expanded={dropdowns.games} onClick={()=>clickDropdown('games')} >
+                aria-expanded={dropdowns.games} onClick={()=>clickDropdown('games')} 
+                ref={gamesToggleRef}>
                   Games
             </Link>
             <ul className={`dropdown-menu ${dropdowns.games && 'show'}`} 
-                  aria-labelledby="navbarDropdown" >
+                  aria-labelledby="navbarDropdown"  ref={gamesMenuRef} >
             <li><Link to="/games" className="dropdown-item">All the Games</Link></li>
             <li><hr className="dropdown-divider" /></li>
             <li><Link to="/games/bulls-and-cows" className="dropdown-item">Bulls and Cows</Link></li>
@@ -93,14 +145,15 @@ export default function Navbar({setCurrUser}) {
 
               <a className={`nav-link dropdown-toggle ${dropdowns.profile && 'show'}`} 
                  href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" 
-                 aria-expanded={dropdowns.profile}  onClick={()=>clickDropdown('profile')} >
+                 aria-expanded={dropdowns.profile}  onClick={()=>clickDropdown('profile')}
+                 ref={profileToggleRef} >
                 <div className="profile-pic">
                     <img src={justUser} alt="Profile Picture" />
                 </div>
               </a>
 
               <ul className={`dropdown-menu ${dropdowns.profile && 'show'}`} 
-                aria-labelledby="navbarDropdown" >
+                aria-labelledby="navbarDropdown" ref={profileMenuRef} >
 
                 { currUser.role === 'guest' ?
                 <>
@@ -118,7 +171,7 @@ export default function Navbar({setCurrUser}) {
                 </> :
                 <>
                 
-                <li><Link to={`/user/${currUser.id}`} className="dropdown-item">
+                <li><Link to={`/users/${currUser.id}`} className="dropdown-item">
                       <FontAwesomeIcon icon="fas fa-sliders-h" className="fa-fw" /> Profile
                     </Link>
                 </li>
