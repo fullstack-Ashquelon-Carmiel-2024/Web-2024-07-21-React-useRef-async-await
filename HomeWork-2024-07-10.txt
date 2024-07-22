@@ -1,8 +1,9 @@
 CHALLENGEs are OPTIONAL
 
 00. Create directory panda/your_name/hw/hw-2024-07-10
-00. Create directory panda/your_name/projects/<your-nodejs-mysql>
-00. Create directory panda/your_name/projects/09-calculator etc.
+00. Create directory panda/your_name/projects/10-hanoy-towers
+00. Create directory panda/your_name/projects/11-shopping-carts
+00. Create directory panda/your_name/projects/12-game-portal
 
 0. Projects
    00-portfolio - get some ideas, what do you want 
