@@ -1,0 +1,10 @@
+$basic-text-shadow: 1px -1px 0 #fe6161, -3px -3px 2px black, 2px 1px 3px rgba(193, 94, 221, 0.43);
+
+.header {
+
+    color: var(--bs-cyan) !important;
+        text-shadow: $basic-text-shadow;
+
+
+
+}

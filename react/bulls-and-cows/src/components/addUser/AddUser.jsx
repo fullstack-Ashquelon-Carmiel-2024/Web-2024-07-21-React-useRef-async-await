@@ -1,5 +1,5 @@
 import './AddUser.scss';
-import {useState} from 'react';
+import {useState, useRef} from 'react';
 import {useNavigate} from 'react-router-dom';
 
 export default function AddUser({children, add}) {
@@ -8,6 +8,8 @@ export default function AddUser({children, add}) {
                                             nick:'',phone:'',
                                             gender:'',role:''});
   const navigate = useNavigate();
+
+  const userAlreadyExistsRef = useRef(null);
 
   const handleChange = e => setFormData({...formData,
                                    [e.target.name]: e.target.value});
@@ -40,13 +42,22 @@ export default function AddUser({children, add}) {
 
     if (e.target.checkValidity()) {
 
-      add(formData);
-      setFormData({fullName:'',email:'',
-                    nick:'',phone:'',
-                    gender:'',role:''});
-      navigate('/users');
+      if (add(formData)) {
 
-      e.target.classList.remove('was-validated');
+        setFormData({fullName:'',email:'',
+        nick:'',phone:'',
+        gender:'',role:''});
+
+        userAlreadyExistsRef.current.classList.replace('opacity-100','opacity-0')
+
+        navigate('/users');
+        
+        e.target.classList.remove('was-validated');
+      } else {
+
+        userAlreadyExistsRef.current.classList.replace('opacity-0','opacity-100')
+
+      }
 
     }
 
@@ -65,7 +76,7 @@ export default function AddUser({children, add}) {
           <form className="fs-3" onSubmit={onSubmit} noValidate  >
           
             <div className="form-group row">
-                <div className="opacity-0 text-danger" >
+                <div className="opacity-0 text-danger" ref={userAlreadyExistsRef} >
                     The Email or the Nick already exists!
                 </div>
             </div>

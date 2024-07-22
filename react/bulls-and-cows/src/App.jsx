@@ -12,6 +12,7 @@ import Login from './components/login/Login';
 import Navbar from './components/navbar/Navbar';
 import UserList from './components/userList/UserList';
 
+import Burger from './learn/Burger';
 import UseEffect from './learn/UseEffect';
 
 import UserContext from './contexts/userContext';
@@ -51,11 +52,17 @@ function App() {
     // Date.now() could still be the same, if addUser() runs in a loop 
     // 
     //setUsers(users.concat({...newUser, id: uuid()}));
+    let result = users.some(u => u.nick.toLowerCase() === newUser.nick.toLowerCase()
+                              || u.email.toLowerCase() === newUser.email.toLowerCase());
+
+    if (result) return false; // the user already exists
+
     const newUsers = [...users,{...newUser, id: uuid()}];
     setUsers(newUsers);
     console.log(`users after setUsers()\n`,users);
     localStorage.setItem('bulls-and-cows-players',JSON.stringify(newUsers));
 
+    return true;
     /* MISSION 01: add check for the existing email or nick.
        -- If exists, don't do nothing, return false 
        -- If not, add the user, return true */
@@ -110,6 +117,7 @@ function App() {
           </Route>                                
           
           <Route path="/use-effect" element={<UseEffect />} />
+          <Route path="/burger" element={<Burger />} />
 
         </Routes>
       </div>

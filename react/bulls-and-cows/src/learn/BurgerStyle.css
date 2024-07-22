@@ -101,3 +101,8 @@
     display: table;
     width: 95px;
 }
+
+.inputs {
+    display: flex;
+    justify-content: space-between;
+}
